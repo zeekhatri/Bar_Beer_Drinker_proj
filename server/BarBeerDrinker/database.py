@@ -291,7 +291,7 @@ def get_top_beers(bar_name):
 
         if rs is None:
             return None
-        return [dict(row) for row in rs]        
+        return [dict(row) for row in rs]
 
 def get_bartender_shifts(bartender_name):
     with engine.connect() as con:
