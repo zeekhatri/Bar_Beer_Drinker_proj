@@ -228,3 +228,47 @@ def get_drinker_region(manufacturer_name):
     except Exception as e:
         return make_response(str(e), 500)
 
+
+@app.route("/api/get_top_drinkers/<bar_name>", methods=["GET"])
+def get_top_drinkers(bar_name):
+    try:
+        if bar_name is None:
+            raise ValueError("Bar is not specified.")
+        return jsonify(database.get_top_drinkers(bar_name))
+    except ValueError as e:
+        return make_response(str(e), 400)
+    except Exception as e:
+        return make_response(str(e), 500)
+
+@app.route("/api/get_top_beers/<bar_name>", methods=["GET"])
+def get_top_beers(bar_name):
+    try:
+        if bar_name is None:
+            raise ValueError("Bar is not specified.")
+        return jsonify(database.get_top_beers(bar_name))
+    except ValueError as e:
+        return make_response(str(e), 400)
+    except Exception as e:
+        return make_response(str(e), 500)        
+
+@app.route("/api/get_bartender_shifts/<bartender_name>", methods=["GET"])
+def get_bartender_shifts(bartender_name):
+    try:
+        if bartender_name is None:
+            raise ValueError("Bartender is not specified.")
+        return jsonify(database.get_bartender_shifts(bartender_name))
+    except ValueError as e:
+        return make_response(str(e), 400)
+    except Exception as e:
+        return make_response(str(e), 500)        
+
+@app.route("/api/get_bartender_beerssold/<bartender_name>", methods=["GET"])
+def get_bartender_beerssold(bartender_name):
+    try:
+        if bartender_name is None:
+            raise ValueError("Bartender is not specified.")
+        return jsonify(database.get_bartender_beerssold(bartender_name))
+    except ValueError as e:
+        return make_response(str(e), 400)
+    except Exception as e:
+        return make_response(str(e), 500)        

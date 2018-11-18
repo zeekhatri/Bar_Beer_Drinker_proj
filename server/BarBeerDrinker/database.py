@@ -226,7 +226,8 @@ def get_top_regions(manufacturer_name):
                 order by itemcount desc) t2, Bars bb\
                 where bb.Name= t2.Bar)t3\
                 group by t3.City,t3.State\
-                order by sales desc;\
+                order by sales desc \
+                limit 10; \
                 ')
             
         rs = con.execute(query, manufacturer_name=manufacturer_name)
@@ -239,18 +240,86 @@ def get_top_regions(manufacturer_name):
 
 def get_drinker_region(manufacturer_name):
     with engine.connect() as con:
-        query = sql.text('select t2.City,t2.State,count(t2.Name) as beersliked \
-            from (select t1.Name, t1.BeerName,d.City,d.State \
+        query = sql.text('select t2.City, t2.State, cast(count(t2.Name) as unsigned) as liked \
+            from (select t1.Name, t1.BeerName, d.City, d.State \
             from (select l.Name, l.BeerName from Beers b, likes l where b.Manufacturer = :manufacturer_name \
             and b.Name= l.BeerName)t1, Drinkers d \
             where t1.Name=d.Name)t2 \
             group by t2.City,t2.State \
-            order by beersliked desc \
+            order by liked desc \
             limit 10; \
             ')
 
             
         rs = con.execute(query, manufacturer_name=manufacturer_name)
+
+        if rs is None:
+            return None
+        return [dict(row) for row in rs]
+
+def get_top_drinkers(bar_name):
+    with engine.connect() as con:
+        query = sql.text('select top10.Name,sum(top10.Total) as top10sum \
+                from \
+                (select distinctrow h.Name,t.ID, t.Total from Transactions t, HasOrdered h \
+                where h.Bar = :bar_name and h.ID=t.ID)top10 \
+                group by top10.Name \
+                order by top10sum DESC \
+                limit 10; \
+                ')
+
+            
+        rs = con.execute(query, bar_name=bar_name)
+
+        if rs is None:
+            return None
+        return [dict(row) for row in rs]
+
+def get_top_beers(bar_name):
+    with engine.connect() as con:
+        query = sql.text('select popularbeer.Item,cast(sum(popularbeer.Quantity) as unsigned) as numsold ,popularbeer.Day\
+                from \
+                (select h.Item,h.quantity,t.ID,t.Date,t.Day \
+                from HasOrdered h, Beers b, Transactions t \
+                where h.Bar = :bar_name and h.Item=b.Name and h.ID=t.ID )popularbeer \
+                group by popularbeer.Item,popularbeer.Day \
+                order by numsold desc \
+                ')
+
+            
+        rs = con.execute(query, bar_name=bar_name)
+
+        if rs is None:
+            return None
+        return [dict(row) for row in rs]        
+
+def get_bartender_shifts(bartender_name):
+    with engine.connect() as con:
+        query = sql.text('select w.BarName , w.BartenderName , w.Day, w.ShiftStart , w.ShiftEnd \
+                from Works w \
+                where w.BartenderName = :bartender_name; \
+                ')
+         
+        rs = con.execute(query, bartender_name=bartender_name)
+
+        if rs is None:
+            return None
+        return [dict(row) for row in rs]
+
+
+def get_bartender_beerssold(bartender_name):
+    with engine.connect() as con:
+        query = sql.text('(select t1.Item,cast(sum(t1.Quantity) as unsigned) as beerssold \
+                from \
+                (select t.ID, h.Item , h.Quantity \
+                from Transactions t , HasOrdered h, BartenderTransaction bt \
+                where bt.BartenderName = :bartender_name and bt.ID = t.ID and t.ID=h.ID)t1, Beers b \
+                where b.Name = t1.Item \
+                group by t1.Item \
+                order by beerssold desc); \
+                ')
+         
+        rs = con.execute(query, bartender_name=bartender_name)
 
         if rs is None:
             return None

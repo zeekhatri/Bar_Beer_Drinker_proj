@@ -12,7 +12,13 @@ export class ManufacturersService {
     return this.http.get<any[]>('/api/manufacturer')
   }
 
+  get_Top_Regions(manf: string){
+    return this.http.get<any[]>('api/get_top_regions/' + manf);
+  }
 
+  get_drinker_Regions(manf: string){
+    return this.http.get<any[]>('api/get_drinker_regions/' + manf);
+  }
 
   
 

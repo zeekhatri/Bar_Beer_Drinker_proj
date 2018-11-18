@@ -28,6 +28,7 @@ export class BeerDetailsComponent implements OnInit {
   ) {
     this.route.paramMap.subscribe((paramMap) => {
       this.beerName = paramMap.get('beer');
+      console.log(this.beerName);
 
 
       this.beerService.getBarsSelling(this.beerName).subscribe(

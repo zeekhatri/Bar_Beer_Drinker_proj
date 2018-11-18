@@ -41,4 +41,11 @@ export class BarsService {
     return this.http.get<any[]>('/api/frequents-data' );
   }
 
+  get_top_drinkers(bar_name: String){
+    return this.http.get<any[]>('/api/get_top_drinkers/' + bar_name );
+  }
+
+  get_top_beers(bar_name: String){
+    return this.http.get<any[]>('/api/get_top_beers/' + bar_name );
+  }
 }

@@ -12,6 +12,9 @@ export class BarsComponent implements OnInit {
 
   constructor(public barService: BarsService) {
     this.getBars();
+
+
+    
    }
 
   ngOnInit() {
@@ -28,6 +31,8 @@ export class BarsComponent implements OnInit {
       }
       
     );
+
+
   }
 
 }

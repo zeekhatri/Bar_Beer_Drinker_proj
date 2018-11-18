@@ -13,6 +13,8 @@ export class BarDetailsComponent implements OnInit {
   barName: string;
   barDetails: Bar[];
   menu: BarMenuItem[];
+  drinkers: any[];
+  beers: any[]; 
 
   constructor(
     private barservice: BarsService,
@@ -40,6 +42,18 @@ export class BarDetailsComponent implements OnInit {
           this.menu = data;
         },
         
+      );
+
+      this.barservice.get_top_drinkers(this.barName).subscribe(
+        data=>{
+          this.drinkers=data;
+        }
+      );
+
+      this.barservice.get_top_beers(this.barName).subscribe(
+        data=>{
+          this.beers=data;
+        }
       );
     });
   }
