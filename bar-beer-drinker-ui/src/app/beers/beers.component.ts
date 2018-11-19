@@ -18,10 +18,12 @@ export class BeersComponent implements OnInit {
       data => {
         this.beers = data;
         this.orignalBeersList = data;
+        console.log(data);
       }
     );
     this.beerService.getBeerManufacturers().subscribe(
       data => {
+        console.log(data);
         this.manufacturerOptions = data.map(manf => {
           return{
             label: manf,

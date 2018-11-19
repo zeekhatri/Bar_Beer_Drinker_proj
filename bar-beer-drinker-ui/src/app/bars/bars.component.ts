@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import{ BarsService, Bar } from '../bars.service';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-bars',
@@ -7,8 +8,9 @@ import{ BarsService, Bar } from '../bars.service';
   styleUrls: ['./bars.component.css']
 })
 export class BarsComponent implements OnInit {
-
+  
   bars: Bar[];
+  
 
   constructor(public barService: BarsService) {
     this.getBars();
@@ -31,6 +33,8 @@ export class BarsComponent implements OnInit {
       }
       
     );
+
+    
 
 
   }

@@ -12,10 +12,23 @@ import { ManufacturersComponent } from './manufacturers/manufacturers.component'
 import { DrinkerDetailsComponent } from './drinker-details/drinker-details.component';
 import { ManufacturerDetailsComponent } from './manufacturer-details/manufacturer-details.component';
 import { BartenderDetailsComponent } from './bartender-details/bartender-details.component';
+import { ModificationsComponent } from './modifications/modifications.component';
+import { ModificationDetailsComponent } from './modification-details/modification-details.component';
 
 const routes: Routes = [
+
   {
-    path:'',
+    path: '',
+    pathMatch: 'full',
+    redirectTo: 'welcome'
+  },
+  {
+    path: 'static',
+    pathMatch: 'full',
+    redirectTo: 'welcome'
+  },
+  {
+    path:'welcome',
     pathMatch: 'full',
     component: WelcomeComponent
 
@@ -71,6 +84,16 @@ const routes: Routes = [
     path: 'manufacturers/:manufacturer',
     pathMatch: 'full',
     component: ManufacturerDetailsComponent
+  },
+  {
+    path: 'modifications',
+    pathMatch: 'full',
+    component: ModificationsComponent
+  },
+  {
+    path: 'modifications/:modification',
+    pathMatch: 'full',
+    component: ModificationDetailsComponent
   },
   {
     path: 'insight',

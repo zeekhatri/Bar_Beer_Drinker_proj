@@ -3,6 +3,7 @@ import {ActivatedRoute} from '@angular/router';
 import {BarsService, Bar, BarMenuItem} from '../bars.service'
 import { HttpResponse } from '@angular/common/http';
 
+declare const Highcharts: any;
 
 @Component({
   selector: 'app-bar-details',
@@ -55,10 +56,68 @@ export class BarDetailsComponent implements OnInit {
           this.beers=data;
         }
       );
+
+      this.barservice.getBusyBarDays(this.barName).subscribe(
+        data=>{
+          console.log(data);
+
+          const day=[];
+        const busyday=[];
+
+        data.forEach(bar => {
+          day.push(bar.Day);
+          busyday.push(bar.busyday);
+        });
+        
+        this.renderCharts(day, busyday);
+        }
+      );
     });
   }
 
   ngOnInit() {
   }
 
+  renderCharts(day: string[], busyday: number[]) {
+    Highcharts.chart('bargraph', {
+      chart: {
+        type: 'column'
+      },
+      title: {
+        text: 'Transactions on different days'
+      },
+      xAxis: {
+        categories: day,
+        title: {
+          text: 'Day'
+        }
+      },
+      yAxis: {
+        min: 0,
+        title: {
+          text: 'No of Transactions'
+        },
+        labels: {
+          overflow: 'justify'
+        }
+      },
+      plotOptions: {
+        bar: {
+          datalabels: {
+            enabled: true
+          }
+        }
+      },
+      legend: {
+        enabled: false
+      },
+      credits: {
+        enabled: false
+      },
+      series: [{
+        data: busyday
+      }]
+
+    });
+  }
 }

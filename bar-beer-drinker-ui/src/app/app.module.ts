@@ -23,6 +23,8 @@ import { ManufacturersComponent } from './manufacturers/manufacturers.component'
 import { DrinkerDetailsComponent } from './drinker-details/drinker-details.component';
 import { ManufacturerDetailsComponent } from './manufacturer-details/manufacturer-details.component';
 import { BartenderDetailsComponent } from './bartender-details/bartender-details.component';
+import { ModificationsComponent } from './modifications/modifications.component';
+import { ModificationDetailsComponent } from './modification-details/modification-details.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +40,9 @@ import { BartenderDetailsComponent } from './bartender-details/bartender-details
     ManufacturersComponent,
     DrinkerDetailsComponent,
     ManufacturerDetailsComponent,
-    BartenderDetailsComponent
+    BartenderDetailsComponent,
+    ModificationsComponent,
+    ModificationDetailsComponent
   ],
   imports: [
     BrowserModule,

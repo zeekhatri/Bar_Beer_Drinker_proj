@@ -48,4 +48,8 @@ export class BarsService {
   get_top_beers(bar_name: String){
     return this.http.get<any[]>('/api/get_top_beers/' + bar_name );
   }
+
+  getBusyBarDays(bar_name: String){
+    return this.http.get<any[]>('/api/get_busy_bardays/' + bar_name );
+  }
 }

@@ -211,6 +211,62 @@ def get_top10_transactions(drinker_name):
             return None
         return [dict(row) for row in rs]
 
+def get_top10_beersordered(drinker_name):
+    with engine.connect() as con:
+        query = sql.text('select t1.Item, cast(sum(t1.Quantity) as unsigned) as mostbeer \
+                from \
+                (select h.Name, h.Bar, h.Item, h.Quantity, h.ID \
+                from HasOrdered h,Beers b \
+                where h.Name=:drinker_name  and b.Name=h.Item \
+                order by ID asc)t1 \
+                group by t1.Item \
+                order by mostbeer desc; \
+                ')
+            
+        rs = con.execute(query, drinker_name=drinker_name)
+
+        if rs is None:
+            return None
+        return [dict(row) for row in rs]
+
+def get_top10_barsspending(drinker_name):
+    with engine.connect() as con:
+        query = sql.text('select t1.Bar,cast(sum(t1.Total) as unsigned) as spending \
+                from \
+                (select distinct h.Name, h.Bar,t.ID,t.Total \
+                from Transactions t, HasOrdered h \
+                where h.Name=:drinker_name and h.ID=t.ID \
+                order by t.ID desc)t1 \
+                group by t1.Bar \
+                order by spending desc; \
+                ') 
+            
+        rs = con.execute(query, drinker_name=drinker_name)
+
+        if rs is None:
+            return None
+        return [dict(row) for row in rs]
+
+def get_top_daysspending(drinker_name):
+    with engine.connect() as con:
+        query = sql.text('select t1.Day,cast(sum(t1.Total) as unsigned) as spending \
+                from \
+                (select distinct h.Name, t.ID,t.Total,t.Day \
+                from Transactions t, HasOrdered h \
+                where h.Name=:drinker_name and h.ID=t.ID \
+                order by t.ID desc)t1 \
+                group by t1.Day \
+                order by spending desc; \
+                ') 
+            
+        rs = con.execute(query, drinker_name=drinker_name)
+
+        if rs is None:
+            return None
+        return [dict(row) for row in rs]        
+
+
+
 def get_top_regions(manufacturer_name):
     with engine.connect() as con:
         query = sql.text('select t3.City, t3.State, cast(sum(itemcount)as unsigned) as sales\
@@ -293,6 +349,26 @@ def get_top_beers(bar_name):
             return None
         return [dict(row) for row in rs]
 
+
+
+def get_busy_bardays(bar_name):
+    with engine.connect() as con:
+        query = sql.text('select t1.Day,cast(count(t1.ID) as unsigned) as busyday \
+                from \
+                (select distinctrow h.Name,t.ID, t.Total ,t.Day \
+                from Transactions t, HasOrdered h \
+                where h.Bar = :bar_name and h.ID=t.ID)t1 \
+                group by t1.Day \
+                order by busyday desc; \
+                ')
+            
+        rs = con.execute(query, bar_name=bar_name)
+
+        if rs is None:
+            return None
+        return [dict(row) for row in rs]
+
+
 def get_bartender_shifts(bartender_name):
     with engine.connect() as con:
         query = sql.text('select w.BarName , w.BartenderName , w.Day, w.ShiftStart , w.ShiftEnd \
@@ -324,6 +400,33 @@ def get_bartender_beerssold(bartender_name):
         if rs is None:
             return None
         return [dict(row) for row in rs]
+
+
+def get_column_name(table_name):
+    with engine.connect() as con:
+        query = sql.text(' select column_name \
+                from information_schema.columns \
+                where table_name= :table_name; \
+                ')
+         
+        rs = con.execute(query, table_name=table_name)
+
+        if rs is None:
+            return None
+        return [dict(row) for row in rs]  
+
+def get_column_count(table_name):
+    with engine.connect() as con:
+        query = sql.text(' select count(*) \
+                from information_schema.columns \
+                where table_name= :table_name; \
+                ')
+         
+        rs = con.execute(query, table_name=table_name)
+
+        if rs is None:
+            return None
+        return [dict(row) for row in rs]  
 
 
 
