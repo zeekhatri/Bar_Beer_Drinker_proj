@@ -20,7 +20,7 @@ const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'welcome'
+    redirectTo:'welcome'
   },
   {
     path: 'static',
@@ -28,10 +28,9 @@ const routes: Routes = [
     redirectTo: 'welcome'
   },
   {
-    path:'welcome',
+    path: 'welcome',
     pathMatch: 'full',
     component: WelcomeComponent
-
   },
   {
     path: 'bars',
